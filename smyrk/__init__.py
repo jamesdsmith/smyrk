@@ -29,7 +29,7 @@ class Command:
         self.cmd = cmd
 
     def add_parameter(self, param):
-        if self.param != '' and emoji_iter.is_digit(self.param) and emoji_iter.is_digit(param):
+        if self.param != '' and emoji.is_digit(self.param) and emoji.is_digit(param):
             self.param += param
         else:
             self.param = param
@@ -72,7 +72,7 @@ class Runtime:
     def tokenize(self, line):
         commands = []
         new_command = None
-        for char in emoji_iter.all_chars(line):
+        for char in emoji.all_chars(line):
             if char in self.instructions:
                 if new_command != None:
                     commands.append(new_command)

@@ -66,7 +66,7 @@ emoji_bindings =  [
 class REPLDelegate(smyrk.RuntimeDelegate):
     def print_with_emoji(self, msg):
         out = ''
-        for char in emoji_iter.all_chars(msg):
+        for char in emoji.all_chars(msg):
             out += char
             if char in emoji.UNICODE_EMOJI:
                 out += ' '
