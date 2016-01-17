@@ -9,7 +9,7 @@ import sys
 try: input = raw_input
 except NameError: pass
 
-emoji_bindings =  [ 
+emoji_bindings = [ 
 (':>', '😏'),
 (':)', '😊'),
 (';)', '😉'),

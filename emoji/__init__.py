@@ -34,7 +34,7 @@ def all_chars(line):
             line = line[i:]
 
 def is_digit(char):
-    return char[:1] in '0123456789'
+    return char[:1] in num_to_emoji
 
 def to_num(line):
     # Implicitly convert true/false to numbers for comparison
@@ -59,3 +59,4 @@ def bool_to_emoji(boolean):
         return '👍'
     else:
         return '👎'
+

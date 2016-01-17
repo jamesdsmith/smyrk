@@ -1,25 +1,5 @@
 import emoji
 
-"""
-HALT  ❌
-CONST 👉
-LOAD  👀
-STO   🗄
-ADD   ➕
-SUB   ➖
-MUL   ✖️
-DIV   ➗
-EQL   🤔
-LSS   🌚
-GTR   🌝
-JMP   🏃
-FJMP  🚶
-READ  📖
-WRITE 🖨
-CALL  ☎️
-RET   🔙
-"""
-
 class Command:
     def __init__(self, cmd='', param=''):
         self.cmd = cmd
@@ -59,13 +39,14 @@ class Runtime:
             '✖️': lambda x: self.push(emoji.to_emoji(emoji.to_num(self.pop()) * emoji.to_num(self.pop()))),
             '➗': lambda x: self.push(emoji.to_emoji(emoji.to_num(self.pop()) // emoji.to_num(self.pop()))),
             '🤔': lambda x: self.push(emoji.bool_to_emoji(emoji.to_num(self.pop()) == emoji.to_num(self.pop()))),
-            '🌚': lambda x: self.push(emoji.bool_to_emoji(emoji.to_num(self.pop()) > emoji.to_num(self.pop()))),
-            '🌝': lambda x: self.push(emoji.bool_to_emoji(emoji.to_num(self.pop()) < emoji.to_num(self.pop()))),
+            '🌚': lambda x: self.push(emoji.bool_to_emoji(emoji.to_num(self.pop()) < emoji.to_num(self.pop()))),
+            '🌝': lambda x: self.push(emoji.bool_to_emoji(emoji.to_num(self.pop()) > emoji.to_num(self.pop()))),
             '🏃': lambda x: "",
             '🚶': lambda x: "",
             '📖': lambda x: "",
             '🖨': lambda x: self.delegate.output(self.pop()),
             '☎️': lambda x: "",
+            '⚓️': lambda x: "",
             '🔙': lambda x: "",
         }
 
