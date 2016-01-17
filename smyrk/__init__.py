@@ -21,39 +21,58 @@ RET   🔙
 """
 
 class Command:
-    def __init__(self, command_type=''):
-        self.command_type = command_type
-        self.parameters = []
+    def __init__(self, cmd='', param=''):
+        self.cmd = cmd
+        self.param = param
 
-    def set_type(self, command_type):
-        self.command_type = command_type
+    def set_type(self, cmd):
+        self.cmd = cmd
 
     def add_parameter(self, param):
-        if len(self.parameters) > 0 and emoji.is_digit(self.parameters[-1]) and emoji.is_digit(param):
-            self.parameters[-1] += param
+        if self.param != '' and emoji_iter.is_digit(self.param) and emoji_iter.is_digit(param):
+            self.param += param
         else:
-            self.parameters.append(param)
+            self.param = param
 
     def __repr__(self):
-        return 'Command({0}, {1})'.format(self.command_type, self.parameters)
+        return 'Command({0}, {1})'.format(self.cmd, self.param)
 
     def __str__(self):
-        msg = self.command_type
-        for param in self.parameters:
-            msg += param
-        return msg
+        return self.cmd + self.param
+
+class EmptyStackException(Exception):
+    pass
 
 class Runtime:
-    instructions = {'❌', '👉', '👀', '🗄', '➕', '➖', '✖️', '➗', '🤔', '🌚', '🌝', '🏃', '🚶', '📖', '🖨', '☎️', '🔙'}
     def __init__(self, DelegateClass):
         self.stack = []
         self.halted = False
         self.delegate = DelegateClass(self)
+        self.environment = {}
+        self.instructions = {
+            '❌': lambda: "",
+            '👉': lambda x: self.push(x),
+            '👀': lambda x: self.push(self.environment[x]),
+            '🗄': lambda x: self.pop(),
+            '➕': lambda x: self.push(self.pop() + self.pop()),
+            '➖': lambda x: self.push(self.pop() - self.pop()),
+            '✖️': lambda x: self.push(self.pop() * self.pop()),
+            '➗': lambda x: self.push(self.pop() / self.pop()),
+            '🤔': lambda x: self.push(self.pop() == '👍'),
+            '🌚': lambda x: self.push(self.pop() > self.pop()),
+            '🌝': lambda x: self.push(self.pop() < self.pop()),
+            '🏃': lambda x: "",
+            '🚶': lambda x: "",
+            '📖': lambda x: "",
+            '🖨': lambda x: self.delegate.output(self.pop()),
+            '☎️': lambda x: "",
+            '🔙': lambda x: "",
+        }
 
     def tokenize(self, line):
         commands = []
         new_command = None
-        for char in emoji.all_chars(line):
+        for char in emoji_iter.all_chars(line):
             if char in self.instructions:
                 if new_command != None:
                     commands.append(new_command)
@@ -69,14 +88,26 @@ class Runtime:
 
     def decode(self, line):
         """Returns the next instruction in the line"""
-        ""
         commands = self.tokenize(line)
         for command in commands:
             self.delegate.output(str(command))
             self.execute(command)
 
     def execute(self, command):
-        ""
+        try:
+            self.instructions[command.cmd](command.param)
+        except EmptyStackException as e:
+            self.delegate.error(str(e))
+
+    def push(self, item):
+        self.stack = [item] + self.stack
+
+    def pop(self):
+        if len(self.stack) == 0:
+            raise EmptyStackException("Tried to pop an empty stack")
+        item = self.stack[0]
+        self.stack = self.stack[1:]
+        return item
 
 class RuntimeDelegate:
     def __init__(self, runtime):
@@ -84,3 +115,6 @@ class RuntimeDelegate:
 
     def output(self, msg):
         """How to output something to the screen"""
+
+    def error(self, msg):
+        """Properly handle errors"""

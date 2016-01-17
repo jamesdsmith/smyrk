@@ -64,11 +64,19 @@ emoji_bindings =  [
 ]
 
 class REPLDelegate(smyrk.RuntimeDelegate):
-    def output(self, msg):
+    def print_with_emoji(self, msg):
         out = ''
-        for char in emoji.all_chars(msg):
-            out += char + ' '
+        for char in emoji_iter.all_chars(msg):
+            out += char
+            if char in emoji.UNICODE_EMOJI:
+                out += ' '
         print(out)
+
+    def output(self, msg):
+        self.print_with_emoji(msg)
+
+    def error(self, msg):
+        self.print_with_emoji(msg)
 
 class REPL:
     def __init__(self):

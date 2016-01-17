@@ -7,5 +7,5 @@ setup(name='smyrk',
       author='James Smith',
       author_email='james.smith@berkeley.edu',
       license='BSD3',
-      packages=['smyrk'],
+      packages=['smyrk', 'emoji_iter'],
       zip_safe=False)
