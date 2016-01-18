@@ -88,8 +88,7 @@ class REPL:
                     file_idx = i + 1
                 if i == file_idx:
                     file_idx = -1
-                    lines = [line.strip() for line in open(arg, 'r')]
-                    for line in lines:
+                    for line in load_file_as_lines(arg):
                         self.runtime.decode(line)
             line = ''
             while not self.runtime.halted:
@@ -99,5 +98,8 @@ class REPL:
                 self.runtime.decode(line)
         except EOFError:
             print('')
+
+    def load_file_as_lines(self, filename):
+        return [line.strip() for line in open(filename, 'r')]
 
 if __name__ == '__main__': REPL().run(sys.argv)
