@@ -92,7 +92,7 @@ class REPL:
                     for line in lines:
                         self.runtime.decode(line)
             line = ''
-            while line != '❌':
+            while not self.runtime.halted:
                 line = input('smyrk> ')
                 for key, value in emoji_bindings:
                     line = line.replace(key, value)
